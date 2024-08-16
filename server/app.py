@@ -53,12 +53,13 @@ class Logout(Resource):
         return {}, 204
 
 class CheckSession(Resource):
+
     def get(self):
-        user_id = session.get('user_id')
-        if user_id:
-            user = User.query.get(user_id)
+        user = User.query.filter(User.id == session.get('user_id')).first()
+        if user:
             return user.to_dict(), 200
-        return {}, 401  # Return an empty JSON object with a 401 status code
+        else:
+            return {}, 401
 
 api.add_resource(ClearSession, '/clear')
 api.add_resource(IndexArticle, '/articles')
